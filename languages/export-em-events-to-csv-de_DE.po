@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Wed Feb 10 2016 09:34:26 GMT+0100 (Mitteleuropäische "
 "Zeit)\n"
-"PO-Revision-Date: Sun Aug 14 2016 13:49:18 GMT+0200 (Mitteleuropäische "
+"PO-Revision-Date: Sun Aug 14 2016 14:09:01 GMT+0200 (Mitteleuropäische "
 "Sommerzeit)\n"
 "Last-Translator: web_admin <h@web.dl>\n"
 "Language-Team: \n"
@@ -42,7 +42,7 @@ msgstr ""
 
 #: ../inc/Admin.php:44
 msgid "Select delimiter:"
-msgstr ""
+msgstr "Trennzeichen:"
 
 #: ../inc/Admin.php:47
 msgid "comma (,)"
