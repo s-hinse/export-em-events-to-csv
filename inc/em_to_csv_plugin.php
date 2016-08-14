@@ -1,11 +1,13 @@
 <?php # -*- coding: utf-8 -*-
 
 namespace SHinse\ExportEMEventsToCSV\inc;
+function register_hooks($em_to_csv_file) {
 
-register_activation_hook( $em_to_csv_file, __NAMESPACE__ . '\em_to_csv_activate' );
-add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
+	register_activation_hook( $em_to_csv_file, __NAMESPACE__ . '\activate' );
+	add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
+}
 
-function em_to_csv_activate() {
+function activate() {
 
 	if ( ! is_plugin_active( 'events-manager/events-manager.php' ) ) {
 		deactivate_plugins( basename( __FILE__ ) );

@@ -30,8 +30,10 @@ if ( ! $correct_php_version ) {
 	exit;
 }
 //load the plugin main file
-$em_to_csv_file = __FILE__;
+
 require_once( 'inc/em_to_csv_plugin.php' );
+$em_to_csv_file = __FILE__;
+\SHinse\ExportEMEventsToCSV\inc\register_hooks( $em_to_csv_file );
 
 /**
  * Register textdomain.
