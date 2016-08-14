@@ -8,7 +8,7 @@ namespace SHinse\ExportEMEventsToCSV\inc;
 class Controller {
 	private $admin;
 	private $exporter;
-	private $delimiter;
+
 
 
 	/**

@@ -29,7 +29,8 @@ if ( ! $correct_php_version ) {
 	echo __( 'You are running PHP ', 'export-em-events-to-csv' ) . phpversion();
 	exit;
 }
-//load the plugin file
+//load the plugin main file
+$em_to_csv_file = __FILE__;
 require_once( 'inc/em_to_csv_plugin.php' );
 
 /**
