@@ -1,16 +1,14 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: SvenH
- * Date: 14.08.2016
- * Time: 10:02
+ * Admin class for export-em-events-to-csv
+ * @author Sven Hinse
  */
 
 namespace SHinse\ExportEMEventsToCSV\inc;
 
 class Admin {
 
-	private  $exporter ;
+	private $exporter;
 
 	public function __construct( Exporter $exporter ) {
 
@@ -41,7 +39,7 @@ class Admin {
 		<div class="wrap"><p><?php esc_html_e( 'Export a CSV file of all your event data by clicking the button.',
 		                                       'export-em-events-to-csv' ); ?> </p>
 			<form action="" method="post">
-				<p><strong><?php esc_html_e( 'Select delimiter:', 'export_em_events_to_csv' ); ?></strong></p>
+				<p><strong><?php esc_html_e( 'Select delimiter:', 'export-em-events-to-csv' ); ?></strong></p>
 
 				<input type="radio" name="delimiter" value=",">
 				<label for="delimiter"><?php esc_html_e( 'comma (,)', 'export-em-events-to-csv' ) ?></label>
@@ -78,6 +76,7 @@ class Admin {
 			if ( isset ( $_POST [ 'delimiter' ] ) ) {
 				$delimiter = $_POST [ 'delimiter' ];
 			}
+			//set delimiter and trigger csv file export
 			$this->exporter->set_delimiter( $delimiter );
 			$this->exporter->deliver_csv_file();
 		}
