@@ -29,11 +29,12 @@ if ( ! $correct_php_version ) {
 	echo __( 'You are running PHP ', 'export-em-events-to-csv' ) . phpversion();
 	exit;
 }
-//load the plugin main file
+//load the plugin main file and atart the plugin
 
-require_once( 'inc/em_to_csv_plugin.php' );
-$em_to_csv_file = __FILE__;
-\SHinse\ExportEMEventsToCSV\inc\register_hooks( $em_to_csv_file );
+require_once( 'inc/Controller.php' );
+$em_to_csv_file   = __FILE__;
+$em_to_csv_plugin = new \SHinse\ExportEMEventsToCSV\inc\Controller();
+$em_to_csv_plugin->run( $em_to_csv_file );
 
 /**
  * Register textdomain.
