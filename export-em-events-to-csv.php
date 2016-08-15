@@ -1,8 +1,8 @@
 <?php # -*- coding: utf-8 -*-
 /**
- * Plugin Name:   Events Manager: Export events to CSV (addon)
+ * Plugin Name:   Export events to CSV (Addon for Events Manager)
  * Plugin URI:    ${Plugin_Uri}
- * Description:
+ * Description:  Exports all Events and their locations into a CSV file.
  * Author:       Sven Hinse
  * Author URI:    http://www.svenhinse.de
  * Contributors:  s-hinse
@@ -37,7 +37,7 @@ $em_to_csv_plugin = new \SHinse\ExportEMEventsToCSV\inc\Controller();
 $em_to_csv_plugin->run( $em_to_csv_file );
 
 /**
- * Register textdomain.
+ * Registers the  textdomain.
  */
 function em_to_csv_load_textdomain() {
 

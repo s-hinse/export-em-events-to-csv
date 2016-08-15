@@ -41,10 +41,10 @@ class Admin {
 			<form action="" method="post">
 				<p><strong><?php esc_html_e( 'Select delimiter:', 'export-em-events-to-csv' ); ?></strong></p>
 
-				<input type="radio" name="delimiter" value=",">
-				<label for="delimiter"><?php esc_html_e( 'comma (,)', 'export-em-events-to-csv' ) ?></label>
-				<p><input type="radio" name="delimiter" value=";" checked />
-					<label for="delimiter"><?php esc_html_e( 'colon (;)', 'export-em-events-to-csv' ) ?></label></p>
+				<input type="radio" name="delimiter" value="," checked>
+				<label for="delimiter"><?php esc_html_e( 'Comma (,)', 'export-em-events-to-csv' ) ?></label>
+				<p><input type="radio" name="delimiter" value=";"  />
+					<label for="delimiter"><?php esc_html_e( 'Semicolon (;)', 'export-em-events-to-csv' ) ?></label></p>
 
 				<?php $this->show_submit_button(); ?></form>
 		</div>
