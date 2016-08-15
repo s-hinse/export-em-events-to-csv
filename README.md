@@ -7,7 +7,7 @@
 
 ##Requirements
  * PHP 5.3 or later
- * -WordPress 4.x
+ * WordPress 4.x
  * Events Manager 5.x.
 
 ##Installation
