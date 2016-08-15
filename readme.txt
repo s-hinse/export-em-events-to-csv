@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: s-hinse
-Donate link: http:///www.svenhinse.de/wwebdev
+Donate link: http:///www.svenhinse.de/webdev
 Tags: Events Manager, CSV, Event export
 Requires at least: 4.0
 Tested up to: 4.5
