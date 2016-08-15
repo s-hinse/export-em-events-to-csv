@@ -12,7 +12,7 @@
 
 ##Installation
 1. Unpack the download package.
-2. Upload the files to the /wp-content/plugins/ directory.
+2. Upload the files to the `/wp-content/plugins/` directory.
 3. Activate the plugin in WordPress backend, make sure you have installed and activated Events Manager first.
 
 ##Usage
