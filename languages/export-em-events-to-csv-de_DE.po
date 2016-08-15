@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Wed Feb 10 2016 09:34:26 GMT+0100 (Mitteleuropäische "
 "Zeit)\n"
-"PO-Revision-Date: Sun Aug 14 2016 21:35:55 GMT+0200 (Mitteleuropäische "
+"PO-Revision-Date: Mon Aug 15 2016 09:59:14 GMT+0200 (Mitteleuropäische "
 "Sommerzeit)\n"
 "Last-Translator: web_admin <h@web.dl>\n"
 "Language-Team: \n"
@@ -25,14 +25,18 @@ msgstr ""
 "X-Loco-Target-Locale: de_DE"
 
 #. Name of the plugin
-msgid "Events Manager: Export events to CSV (addon)"
-msgstr ""
-"Das Plugin kann nicht aktiviert werden, da Events Manager nicht aktiviert "
-"ist."
+msgid "Export events to CSV (Addon for Events Manager)"
+msgstr "Events als CSV exportieren (Addon für Events Manager)"
 
 #. URI of the plugin
 msgid "${Plugin_Uri}"
 msgstr ""
+
+#. Description of the plugin
+msgid "Exports all Events and their locations into a CSV file."
+msgstr ""
+"Exportiert alle Veranstaltungen mit ihren Veranstaltungsorten in eine CSV-"
+"Datei."
 
 #. Author of the plugin
 msgid "Sven Hinse"
@@ -42,11 +46,19 @@ msgstr ""
 msgid "http://www.svenhinse.de"
 msgstr ""
 
-#: ../inc/Controller.php:33
+#: ../inc/Admin.php:45
+msgid "Comma (,)"
+msgstr "Komma (,)"
+
+#: ../inc/Admin.php:47
+msgid "Semicolon (;)"
+msgstr "Semikolon (;)"
+
+#: ../inc/Controller.php:45
 msgid ""
 "This plugin cannot be activated because it requires the Events Manager "
 "plugin to be activated first. "
-msgstr ""
+msgstr "Bitte erst Events Manager aktivieren!"
 
 #: ../export-em-events-to-csv.php:26
 #, php-format
@@ -61,40 +73,26 @@ msgstr ""
 msgid "You are running PHP "
 msgstr "Du benutzt Version "
 
-#: ../inc/Admin.php:30
+#: ../inc/Admin.php:28
 msgid "Export events as CSV"
 msgstr "Events als CSV exportieren"
 
-#: ../inc/Admin.php:31
+#: ../inc/Admin.php:29
 msgid "Export Events as CSV"
 msgstr "Events als CSV exportieren"
 
-#: ../inc/Admin.php:41
+#: ../inc/Admin.php:39
 msgid "Export a CSV file of all your event data by clicking the button."
 msgstr "Klicken, um eine CSV-Datei mit allen Events zu exportieren."
 
-#: ../inc/Admin.php:44
+#: ../inc/Admin.php:42
 msgid "Select delimiter:"
 msgstr "Trennzeichen:"
 
-#: ../inc/Admin.php:47
-msgid "comma (,)"
-msgstr "Komma (,)"
-
-#: ../inc/Admin.php:49
-msgid "colon (;)"
-msgstr "Semikolon (;)"
-
-#: ../inc/Admin.php:66
+#: ../inc/Admin.php:64
 msgid "Export CSV file"
 msgstr "CSV-Datei exportieren"
 
-#: ../inc/Controller.php:35 ../inc/em_to_csv_plugin.php:20
+#: ../inc/Controller.php:47
 msgid "back"
 msgstr "zurück"
-
-#: ../inc/em_to_csv_plugin.php:18
-msgid ""
-"This plugin can not be activated because it requires the Events Manager "
-"plugin to be activated first. "
-msgstr "Bitte zunächst Events Manager aktivieren!"
