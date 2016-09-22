@@ -36,10 +36,9 @@ class Exporter {
 		$this->delimiter = $delimiter;
 	}
 
-
-
 	/**
 	 * reads all events from the database
+	 *
 	 * @return array  Array with events
 	 */
 	private function read_events_from_db() {
@@ -68,15 +67,17 @@ class Exporter {
 		$query    = "SELECT * from " . $prefix . "em_locations where location_id =" . $location_id;
 		$location = $wpdb->get_results( $query, ARRAY_A );
 
-		//as we expect only one row, we unwrap the inner array
-		$location = $location [ 0 ];
+		//as we expect only one row, we unwrap the inner array, if $location is set
+		if ( isset($location[ 0 ]) ) {
+			$location = $location [ 0 ];
 
-		//change key 'post content' to 'location_description'
-		$location[ 'location_description' ] = $location[ 'post_content' ];
-		unset ( $location[ 'post_content' ] );
+			//change key 'post content' to 'location_description'
+			$location[ 'location_description' ] = $location[ 'post_content' ];
+			unset ( $location[ 'post_content' ] );
 
-		return $location;
-
+			return $location;
+		}
+	return false;
 	}
 
 	/**
@@ -88,7 +89,7 @@ class Exporter {
 		$events = $this->unserialize_event_attributes( $events );
 		$events = $this->add_locations_to_events( $events );
 		$events = $this->strip_html_tags( $events );
-		$this->download_send_headers( "em-events" . date( m . d . y ) . ".csv" );
+		$this->download_send_headers( "em-events" . date("m . d . y ") . ".csv" );
 		echo $this->array_to_csv( $events );
 		die;
 	}
@@ -167,7 +168,7 @@ class Exporter {
 	}
 
 	/**
-	 * @param $events 
+	 * @param $events
 	 *
 	 * @return array The supplied events array with added location details
 	 */
@@ -177,9 +178,8 @@ class Exporter {
 			$location_info   = $this->read_location_from_db( $row[ 'location_id' ] );
 			$events [ $key ] = is_array( $location_info ) ? array_merge( $row, $location_info ) : $row;
 
-
-
 		}
+
 		return $events;
 	}
 
@@ -188,16 +188,16 @@ class Exporter {
 	 *
 	 * @return Array The supplied array without HTML-Tags
 	 */
-	private  function strip_html_tags ($events){
-		foreach ($events as $key=>$row) {
-			foreach ($row as $rowkey=>$column) {
-				$events[$key][$rowkey] = strip_tags( $column );
+	private function strip_html_tags( $events ) {
+
+		foreach ( $events as $key => $row ) {
+			foreach ( $row as $rowkey => $column ) {
+				$events[ $key ][ $rowkey ] = strip_tags( $column );
 			}
 		}
+
 		return $events;
 
 	}
-
-	
 
 }
