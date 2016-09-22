@@ -110,8 +110,8 @@ class Exporter {
 
 		//set utf-8 encoding
 		fprintf( $df, chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) );
-
-		fputcsv( $df, array_keys( reset( $array ) ), $this->delimiter );
+		//write keys of the longest array element to the file
+		fputcsv( $df, array_keys( max( $array ) ), $this->delimiter );
 		foreach ( $array as $row ) {
 			fputcsv( $df, $row, $this->delimiter );
 		}
