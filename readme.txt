@@ -3,7 +3,8 @@ Contributors: s-hinse
 Donate link: http:///www.svenhinse.de/webdev
 Tags: Events Manager, CSV, Event export
 Requires at least: 4.0
-Tested up to: 4.5
+Tested up to: 4.6
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +36,8 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
+=1.1.1 =
+ * fixed bug where csv output is messed up if first event has no custom attributes
 = 1.1 =
  * added choice of delimiter
 = 1.0 =
