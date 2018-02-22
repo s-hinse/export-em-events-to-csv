@@ -27,7 +27,7 @@ class Controller {
 	 */
 	public function run( $em_to_csv_file ) {
 
-		register_activation_hook( $em_to_csv_file, __NAMESPACE__ . '\activate' );
+		register_activation_hook( $em_to_csv_file, array($this, 'activate') );
 		add_action( 'plugins_loaded', array( $this, 'init' ) );
 
 	}
