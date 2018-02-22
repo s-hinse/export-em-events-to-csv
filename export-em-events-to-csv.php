@@ -6,7 +6,7 @@
  * Author:       Sven Hinse
  * Author URI:    http://www.svenhinse.de
  * Contributors:  s-hinse
- * Version:       1.1.1
+ * Version:       1.1.2
  * Text Domain:   export-em-events-to-csv
  * Domain Path:   /languages
  * License:       GPLv2 or later
