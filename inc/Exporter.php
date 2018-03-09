@@ -1,8 +1,9 @@
 <?php
 /**
- *Exporter class for export-em-events-to-csv
+ * Exporter class for export-em-events-to-csv
  *
  * @author: s-hinse
+ * @package export-em-events-to-csv
  */
 
 namespace SHinse\ExportEMEventsToCSV\inc;
@@ -14,22 +15,26 @@ namespace SHinse\ExportEMEventsToCSV\inc;
  */
 class Exporter {
 
-	/**
+	/** Delimiter storage.
+	 *
 	 * @var string The delimiter to use in the csv file
 	 */
 
 	private $delimiter;
 
 	/**
-	 * @return string
+	 * Returns the current delimiter.
+	 *
+	 * @return string The delimiter for the csv file
 	 */
 	public function get_delimiter() {
 
 		return $this->delimiter;
 	}
 
-	/**
-	 * @param string $delimiter
+	/** Sets the delimiter.
+	 *
+	 * @param string $delimiter The desired delimiter.
 	 */
 	public function set_delimiter( $delimiter ) {
 
@@ -37,7 +42,7 @@ class Exporter {
 	}
 
 	/**
-	 * reads all events from the database
+	 * Reads all events from the database
 	 *
 	 * @return array  Array with events
 	 */
@@ -45,20 +50,19 @@ class Exporter {
 
 		global $wpdb;
 		$prefix = $wpdb->prefix;
-		$query  = "SELECT * FROM " . $prefix . "em_events e  ";
-
-		$events = $wpdb->get_results( $query, ARRAY_A );
+		$events = $wpdb->get_results($wpdb->prepare('SELECT * FROM %pre em_events e',$prefix), ARRAY_A );
 
 		return $events;
 
 	}
 
 	/**
-	 * returns an array with the the location details for the given location id
+	 * Returns an array with the the location details for the given location id
 	 *
-	 * @param $location_id
+	 * @param int $location_id The id of the location for the location details query.
 	 *
-	 * @return array  Associative array with the db row of the location with $location_id
+	 * @return mixed  Associative array with the db row of the location with $location_id,
+	 *                False, if location with this ID is not set.
 	 */
 	private function read_location_from_db( $location_id ) {
 
@@ -67,21 +71,22 @@ class Exporter {
 		$query    = "SELECT * from " . $prefix . "em_locations where location_id =" . $location_id;
 		$location = $wpdb->get_results( $query, ARRAY_A );
 
-		//as we expect only one row, we unwrap the inner array, if $location is set
-		if ( isset($location[ 0 ]) ) {
-			$location = $location [ 0 ];
+		// As we expect only one row, we unwrap the inner array, if $location is set.
+		if ( isset( $location[0] ) ) {
+			$location = $location [0];
 
-			//change key 'post content' to 'location_description'
-			$location[ 'location_description' ] = $location[ 'post_content' ];
-			unset ( $location[ 'post_content' ] );
+			// Change key 'post content' to 'location_description'.
+			$location['location_description'] = $location['post_content'];
+			unset( $location['post_content'] );
 
 			return $location;
 		}
-	return false;
+
+		return false;
 	}
 
 	/**
-	 *gets event data, unserializes them and provides file to download
+	 * .
 	 */
 	public function deliver_csv_file() {
 
@@ -89,28 +94,28 @@ class Exporter {
 		$events = $this->unserialize_event_attributes( $events );
 		$events = $this->add_locations_to_events( $events );
 		$events = $this->strip_html_tags( $events );
-		$this->download_send_headers( "em-events" . date("m . d . y ") . ".csv" );
-		echo $this->array_to_csv( $events );
+		$this->download_send_headers( 'em-events' . date( 'm . d . y' ) . '.csv' );
+		echo esc_html( $this->array_to_csv( $events ) );
 		die;
 	}
 
 	/**
-	 * @param array $array The array with event data
+	 * @param array $array The array with event data.
 	 *
 	 * @return null|string
 	 */
 	protected function array_to_csv( array &$array ) {
 
-		if ( count( $array ) == 0 ) {
-			return NULL;
+		if ( 0 === count( $array ) ) {
+			return null;
 		}
 
 		ob_start();
 		$df = fopen( "php://output", 'w' );
 
-		//set utf-8 encoding
+		// set utf-8 encoding.
 		fprintf( $df, chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) );
-		//write keys of the longest array element to the file
+		// write keys of the longest array element to the file.
 		fputcsv( $df, array_keys( max( $array ) ), $this->delimiter );
 		foreach ( $array as $row ) {
 			fputcsv( $df, $row, $this->delimiter );
@@ -121,30 +126,32 @@ class Exporter {
 	}
 
 	/**
-	 * @param $filename The name of the file to be downloaded
+	 * Sends the headers for the download
 	 *
-	 * @return null
+	 * @param string $filename The name of the file to be downloaded.
+	 * @return void
 	 */
 	protected function download_send_headers( $filename ) {
 
-		// disable caching
-		$now = gmdate( "D, d M Y H:i:s" );
-		header( "Expires: Tue, 03 Jul 2001 06:00:00 GMT" );
-		header( "Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate" );
-		header( "Last-Modified: {$now} GMT" );
+		// Disable caching.
+		header( 'Expires: Tue, 03 Jul 2001 06:00:00 GMT' );
+		header( 'Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate' );
+		header( 'Last-Modified: {$now} GMT' );
 
-		// force download
-		header( "Content-Type: application/force-download" );
-		header( "Content-Type: application/octet-stream" );
-		header( "Content-Type: application/download" );
+		// Force download.
+		header( 'Content-Type: application/force-download' );
+		header( 'Content-Type: application/octet-stream' );
+		header( 'Content-Type: application/download' );
 
-		// disposition / encoding on response body
+		// Dsposition / encoding on response body.
 		header( "Content-Disposition: attachment;filename={$filename}" );
-		header( "Content-Transfer-Encoding: binary" );
+		header( 'Content-Transfer-Encoding: binary' );
 	}
 
 	/**
-	 * @param $events Array with events manager event data
+	 * Unserializes the event attributes and merges back into the events array.
+	 *
+	 * @param array $events Array with events manager event data.
 	 *
 	 * @return array The input array, merged with the unserialized data of 'event_attributes'
 	 */
@@ -152,15 +159,14 @@ class Exporter {
 
 		foreach ( $events as $key => $row ) {
 
-			if ( isset( $row [ 'event_attributes' ] ) ) {
-				$event_attributes = unserialize( $row[ 'event_attributes' ] );
-				//sort elements by key to get always the same order
+			if ( isset( $row ['event_attributes'] ) ) {
+				$event_attributes = unserialize( $row['event_attributes'] );
+				// Sort elements by key to get always the same order.
 				ksort( $event_attributes );
 				$events [ $key ] = is_array( $event_attributes ) ? array_merge( $row, $event_attributes ) : $row;
-				//delete the serialized version
-				unset( $events[ $key ] [ 'event_attributes' ] );
+				// Delete the serialized version.
+				unset( $events[ $key ] ['event_attributes'] );
 			}
-
 		}
 
 		return $events;
@@ -168,14 +174,16 @@ class Exporter {
 	}
 
 	/**
-	 * @param $events
+	 * Adds the location array to the event array
+	 *
+	 * @param array $events The array with events.
 	 *
 	 * @return array The supplied events array with added location details
 	 */
 	private function add_locations_to_events( $events ) {
 
 		foreach ( $events as $key => $row ) {
-			$location_info   = $this->read_location_from_db( $row[ 'location_id' ] );
+			$location_info   = $this->read_location_from_db( $row['location_id'] );
 			$events [ $key ] = is_array( $location_info ) ? array_merge( $row, $location_info ) : $row;
 
 		}
@@ -184,15 +192,17 @@ class Exporter {
 	}
 
 	/**
-	 * @param array $events
+	 * Strips all HTML Tags from the event array.
 	 *
-	 * @return Array The supplied array without HTML-Tags
+	 * @param array $events The event array to be stripped.
+	 *
+	 * @return array The supplied array without HTML-Tags
 	 */
 	private function strip_html_tags( $events ) {
 
 		foreach ( $events as $key => $row ) {
 			foreach ( $row as $rowkey => $column ) {
-				$events[ $key ][ $rowkey ] = strip_tags( $column );
+				$events[ $key ][ $rowkey ] = wp_strip_all_tags( $column );
 			}
 		}
 
