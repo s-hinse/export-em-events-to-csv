@@ -31,6 +31,9 @@ class Controller {
 	public function run( $em_to_csv_file ) {
 
 		register_activation_hook( $em_to_csv_file, array( $this, 'activate' ) );
+
+
+
 		add_action( 'plugins_loaded', array( $this, 'init' ) );
 
 	}
@@ -42,7 +45,7 @@ class Controller {
 
 		if ( ! is_plugin_active( 'events-manager/events-manager.php' ) ) {
 			deactivate_plugins( basename( __FILE__ ) );
-			wp_die(esc_html(
+			wp_die(wp_kses_post(
 				'<p>' .
 
 				__( 'This plugin cannot be activated because it requires the Events Manager plugin to be activated first. ', 'export-em-events-to-csv' )

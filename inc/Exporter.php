@@ -14,6 +14,7 @@ namespace SHinse\ExportEMEventsToCSV\inc;
  * @package SHinse\ExportEMEventsToCSV\inc
  */
 class Exporter {
+	//phpcs:disable WordPress.VIP.DirectDatabaseQuery.DirectQuery
 
 	/** Delimiter storage.
 	 *
@@ -50,7 +51,8 @@ class Exporter {
 
 		global $wpdb;
 		$prefix = $wpdb->prefix;
-		$events = $wpdb->get_results($wpdb->prepare('SELECT * FROM %pre em_events e',$prefix), ARRAY_A );
+		$table  = $prefix . 'em_events';
+		$events = $wpdb->get_results( 'SELECT * FROM ' . $table, ARRAY_A );
 
 		return $events;
 
@@ -91,10 +93,10 @@ class Exporter {
 	public function deliver_csv_file() {
 
 		$events = $this->read_events_from_db();
-		$events = $this->unserialize_event_attributes( $events );
+		$events = $this->read_event_attributes( $events );
 		$events = $this->add_locations_to_events( $events );
 		$events = $this->strip_html_tags( $events );
-		$this->download_send_headers( 'em-events' . date( 'm . d . y' ) . '.csv' );
+		$this->download_send_headers( 'em-events' . date( 'm- d- y' ) . '.csv' );
 		echo esc_html( $this->array_to_csv( $events ) );
 		die;
 	}
@@ -129,6 +131,7 @@ class Exporter {
 	 * Sends the headers for the download
 	 *
 	 * @param string $filename The name of the file to be downloaded.
+	 *
 	 * @return void
 	 */
 	protected function download_send_headers( $filename ) {
@@ -155,19 +158,16 @@ class Exporter {
 	 *
 	 * @return array The input array, merged with the unserialized data of 'event_attributes'
 	 */
-	protected function unserialize_event_attributes( $events ) {
+	private function read_event_attributes( $events ) {
+		$attr = em_get_attributes();
 
-		foreach ( $events as $key => $row ) {
-
-			if ( isset( $row ['event_attributes'] ) ) {
-				$event_attributes = unserialize( $row['event_attributes'] );
-				// Sort elements by key to get always the same order.
-				ksort( $event_attributes );
-				$events [ $key ] = is_array( $event_attributes ) ? array_merge( $row, $event_attributes ) : $row;
-				// Delete the serialized version.
-				unset( $events[ $key ] ['event_attributes'] );
+		foreach ( $events as $key => $event ) {
+			foreach ( $attr['names'] as $attr_name ) {
+				$attr_value                   = get_post_meta( $event['post_id'], $attr_name, true );
+				$events[ $key ][ $attr_name ] = $attr_value;
 			}
 		}
+
 
 		return $events;
 
@@ -182,9 +182,9 @@ class Exporter {
 	 */
 	private function add_locations_to_events( $events ) {
 
-		foreach ( $events as $key => $row ) {
-			$location_info   = $this->read_location_from_db( $row['location_id'] );
-			$events [ $key ] = is_array( $location_info ) ? array_merge( $row, $location_info ) : $row;
+		foreach ( $events as $key => $event ) {
+			$location_info   = $this->read_location_from_db( $event['location_id'] );
+			$events [ $key ] = is_array( $location_info ) ? array_merge( $event, $location_info ) : $event;
 
 		}
 

@@ -22,8 +22,8 @@ em_to_csv_load_textdomain();
 // Check for right php version.
 $correct_php_version = version_compare( phpversion(), '5.3.0', '>=' );
 if ( ! $correct_php_version ) {
-	echo sprintf( esc_html__( 'This plugin cannot be activated because it requires at least PHP version %1$s. ', 'export-em-events-to-csv' ),
-	5.3 );
+	echo wp_kses_post(sprintf( __( 'This plugin cannot be activated because it requires at least PHP version %1$s. ', 'export-em-events-to-csv' ),
+	5.3 ));
 
 	echo esc_html__( 'You are running PHP ', 'export-em-events-to-csv' ) . esc_html( phpversion() );
 	exit;
