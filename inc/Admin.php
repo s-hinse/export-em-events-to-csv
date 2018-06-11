@@ -93,7 +93,8 @@ class Admin {
 		wp_nonce_field( 'em_csv_export' );
 
 		$html = '	<input type="hidden" name="action" value="csv_export" />';
-		echo esc_html( $html );
+		//phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
+		echo ( $html );
 		submit_button( __( 'Export CSV file', 'export-em-events-to-csv' ) );
 
 	}
