@@ -152,11 +152,11 @@ class Exporter {
 	}
 
 	/**
-	 * Unserializes the event attributes and merges back into the events array.
+	 * Reads the events' custom attributes from post meta.
 	 *
 	 * @param array $events Array with events manager event data.
 	 *
-	 * @return array The input array, merged with the unserialized data of 'event_attributes'
+	 * @return array The input array, merged with the data of the custom attributes.
 	 */
 	private function read_event_attributes( $events ) {
 		$attr = em_get_attributes();
@@ -167,7 +167,6 @@ class Exporter {
 				$events[ $key ][ $attr_name ] = $attr_value;
 			}
 		}
-
 
 		return $events;
 

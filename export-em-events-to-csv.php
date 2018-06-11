@@ -5,7 +5,7 @@
  * Author:       Sven Hinse
  * Author URI:    http://www.svenhinse.de
  * Contributors:  s-hinse
- * Version:       1.1.2
+ * Version:       1.2.0
  * Text Domain:   export-em-events-to-csv
  * Domain Path:   /languages
  * License:       GPLv2 or later
@@ -22,8 +22,9 @@ em_to_csv_load_textdomain();
 // Check for right php version.
 $correct_php_version = version_compare( phpversion(), '5.3.0', '>=' );
 if ( ! $correct_php_version ) {
-	echo wp_kses_post(sprintf( __( 'This plugin cannot be activated because it requires at least PHP version %1$s. ', 'export-em-events-to-csv' ),
-	5.3 ));
+	// translators: %1s  is the minimum required PHP version.
+	echo wp_kses_post( sprintf( __( 'This plugin cannot be activated because it requires at least PHP version %1$s. ', 'export-em-events-to-csv' ),
+	5.3 ) );
 
 	echo esc_html__( 'You are running PHP ', 'export-em-events-to-csv' ) . esc_html( phpversion() );
 	exit;

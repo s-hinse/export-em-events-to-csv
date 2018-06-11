@@ -65,7 +65,7 @@ class Admin {
 				if ( false === $delimiter ) {
 					$comma_checked = 'checked';
 				} else {
-					',' === $delimiter ? $comma_checked = '"checked' : $semicolon_checked = 'checked';
+					',' === $delimiter ? $comma_checked = 'checked' : $semicolon_checked = 'checked';
 				}
 				?>
 
@@ -94,7 +94,7 @@ class Admin {
 
 		$html = '	<input type="hidden" name="action" value="csv_export" />';
 		//phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
-		echo ( $html );
+		echo( $html );
 		submit_button( __( 'Export CSV file', 'export-em-events-to-csv' ) );
 
 	}
@@ -103,10 +103,10 @@ class Admin {
 	 * Checks if submit button was clicked
 	 */
 	public function csv_export_listener() {
-
+		//phpcs:disable WordPress.VIP.SuperGlobalInputUsage.AccessDetected
 		// check if export button was clicked.
 		if ( isset ( $_POST['action'] ) && $_POST['action'] === "csv_export" && check_admin_referer( 'em_csv_export' ) ) {
-			//check delimiter value
+			// Check delimiter value.
 			if ( isset ( $_POST ['delimiter'] ) && ( ',' === $_POST ['delimiter'] || ';' === $_POST ['delimiter'] ) ) {
 				$delimiter = $_POST ['delimiter'];
 				update_option( 'export-em-events-to-csv-delimiter', $delimiter );
