@@ -54,6 +54,28 @@ class Exporter {
 		$table  = $prefix . 'em_events';
 		$events = $wpdb->get_results( 'SELECT * FROM ' . $table, ARRAY_A );
 
+
+		return $events;
+
+	}
+
+	/**
+	 * Reads the events' custom attributes from post meta.
+	 *
+	 * @param array $events Array with events manager event data.
+	 *
+	 * @return array The input array, merged with the data of the custom attributes.
+	 */
+	private function read_event_attributes( $events ) {
+		$attr = em_get_attributes();
+
+		foreach ( $events as $key => $event ) {
+			foreach ( $attr['names'] as $attr_name ) {
+				$attr_value                   = get_post_meta( $event['post_id'], $attr_name, true );
+				$events[ $key ][ $attr_name ] = $attr_value;
+			}
+		}
+
 		return $events;
 
 	}
@@ -70,7 +92,7 @@ class Exporter {
 
 		global $wpdb;
 		$prefix   = $wpdb->prefix;
-		$query    = "SELECT * from " . $prefix . "em_locations where location_id =" . $location_id;
+		$query    = 'SELECT * from ' . $prefix . 'em_locations where location_id =' . $location_id;
 		$location = $wpdb->get_results( $query, ARRAY_A );
 
 		// As we expect only one row, we unwrap the inner array, if $location is set.
@@ -97,8 +119,10 @@ class Exporter {
 		$events = $this->add_locations_to_events( $events );
 		$events = $this->strip_html_tags( $events );
 		$this->download_send_headers( 'em-events' . date( 'm- d- y' ) . '.csv' );
-		echo esc_html( $this->array_to_csv( $events ) );
+		//phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
+		echo ( $this->array_to_csv( $events ) );
 		die;
+		//phpcs:enable WordPress.XSS.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -106,11 +130,13 @@ class Exporter {
 	 *
 	 * @return null|string
 	 */
-	protected function array_to_csv( array &$array ) {
+	protected function array_to_csv( array $events ) {
 
-		if ( 0 === count( $array ) ) {
+		if ( 0 === count( $events ) ) {
 			return null;
 		}
+		$events = $this->remove_unwanted_keys($events);
+
 
 		ob_start();
 		$df = fopen( "php://output", 'w' );
@@ -118,9 +144,9 @@ class Exporter {
 		// set utf-8 encoding.
 		fprintf( $df, chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) );
 		// write keys of the longest array element to the file.
-		fputcsv( $df, array_keys( max( $array ) ), $this->delimiter );
-		foreach ( $array as $row ) {
-			fputcsv( $df, $row, $this->delimiter );
+		fputcsv( $df, array_keys( max( $events ) ), $this->delimiter );
+		foreach ( $events as $event ) {
+			fputcsv( $df, $event, $this->delimiter );
 		}
 		fclose( $df );
 
@@ -151,26 +177,7 @@ class Exporter {
 		header( 'Content-Transfer-Encoding: binary' );
 	}
 
-	/**
-	 * Reads the events' custom attributes from post meta.
-	 *
-	 * @param array $events Array with events manager event data.
-	 *
-	 * @return array The input array, merged with the data of the custom attributes.
-	 */
-	private function read_event_attributes( $events ) {
-		$attr = em_get_attributes();
 
-		foreach ( $events as $key => $event ) {
-			foreach ( $attr['names'] as $attr_name ) {
-				$attr_value                   = get_post_meta( $event['post_id'], $attr_name, true );
-				$events[ $key ][ $attr_name ] = $attr_value;
-			}
-		}
-
-		return $events;
-
-	}
 
 	/**
 	 * Adds the location array to the event array
@@ -207,6 +214,25 @@ class Exporter {
 
 		return $events;
 
+	}
+
+	private function remove_unwanted_keys( $events ) {
+		$unwanted_keys = [
+			'event_id',
+			'post_id',
+			'event_owner',
+			'event_status',
+			'blog_id',
+			'group_id',
+		];
+		$unwanted_keys = apply_filters( 'em_events_csv_export_unwanted_keys', $unwanted_keys );
+		// Event_attributes need to be removed, therefore they cannot be filtered.
+		$unwanted_keys[] = 'event_attributes';
+		foreach ( $events as $key => $event ) {
+			$events[ $key ] = array_diff_key( $event, array_flip( $unwanted_keys ) );
+		}
+
+		return $events;
 	}
 
 }
