@@ -14,7 +14,7 @@ namespace SHinse\ExportEMEventsToCSV\inc;
  * @package SHinse\ExportEMEventsToCSV\inc
  */
 class Exporter {
-	//phpcs:disable WordPress.VIP.DirectDatabaseQuery.DirectQuery
+	//phpcs:disable WordPress.VIP.DirectDatabaseQuery
 
 	/** Delimiter storage.
 	 *
@@ -120,13 +120,14 @@ class Exporter {
 		$events = $this->strip_html_tags( $events );
 		$this->download_send_headers( 'em-events' . date( 'm- d- y' ) . '.csv' );
 		//phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
-		echo ( $this->array_to_csv( $events ) );
+		echo( $this->array_to_csv( $events ) );
 		die;
 		//phpcs:enable WordPress.XSS.EscapeOutput.OutputNotEscaped
 	}
 
-	/**
-	 * @param array $array The array with event data.
+	/** Converts the events array to CSV
+	 *
+	 * @param array $events The array with event data.
 	 *
 	 * @return null|string
 	 */
@@ -135,9 +136,7 @@ class Exporter {
 		if ( 0 === count( $events ) ) {
 			return null;
 		}
-		$events = $this->remove_unwanted_keys($events);
-
-
+		$events = $this->remove_unwanted_keys( $events );
 		ob_start();
 		$df = fopen( "php://output", 'w' );
 
@@ -178,7 +177,6 @@ class Exporter {
 	}
 
 
-
 	/**
 	 * Adds the location array to the event array
 	 *
@@ -216,7 +214,15 @@ class Exporter {
 
 	}
 
-	private function remove_unwanted_keys( $events ) {
+	/**
+	 * Removes keys from $events array. Key with keys to remove can be filtered.
+	 *
+	 * @param array $events The events array.
+	 * @wp_filter "em_events_csv_export_unwanted_keys"
+	 *
+	 * @return array     *
+	 */
+	private function remove_unwanted_keys( array $events ) {
 		$unwanted_keys = [
 			'event_id',
 			'post_id',

@@ -105,7 +105,7 @@ class Admin {
 	public function csv_export_listener() {
 		//phpcs:disable WordPress.VIP.SuperGlobalInputUsage.AccessDetected
 		// check if export button was clicked.
-		if ( isset ( $_POST['action'] ) && $_POST['action'] === "csv_export" && check_admin_referer( 'em_csv_export' ) ) {
+		if ( isset ( $_POST['action'] ) && "csv_export" === $_POST['action'] && check_admin_referer( 'em_csv_export' ) ) {
 			// Check delimiter value.
 			if ( isset ( $_POST ['delimiter'] ) && ( ',' === $_POST ['delimiter'] || ';' === $_POST ['delimiter'] ) ) {
 				$delimiter = $_POST ['delimiter'];
