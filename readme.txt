@@ -47,9 +47,8 @@ If you want to add or remove fields from the selection, you can use the filter '
 =1.2 =
 * adapt to fit database structure of current events manager plugin for custom attributes
 * add filter to remove unwanted fields from the CSV
-= 1.1.2 =
- * add option to remember the last used delimiter
- * fixed bug that caused a php warning
+* add option to remember the last used delimiter
+* fixed bug that caused a php warning
 = 1.1.1 =
  * fixed bug where csv output is messed up if first event has no custom attributes
 = 1.1 =
