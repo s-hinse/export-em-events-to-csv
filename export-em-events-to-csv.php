@@ -23,16 +23,16 @@ if ( ! is_admin() ) {
 }
 em_to_csv_load_textdomain();
 
-// Check for right php version.
-$correct_php_version = version_compare( phpversion(), '5.3.0', '>=' );
-if ( ! $correct_php_version ) {
-	// translators: %1s  is the minimum required PHP version.
-	echo wp_kses_post( sprintf( __( 'This plugin cannot be activated because it requires at least PHP version %1$s. ', 'export-em-events-to-csv' ),
-		5.3 ) );
 
-	echo esc_html__( 'You are running PHP ', 'export-em-events-to-csv' ) . esc_html( phpversion() );
-	exit;
+if ( ! check_php_version() ) {
+	add_action( 'admin_notices', 'em_to_csv_admin_notice_wrong_php_version' );
+
+	return;
+
 }
+
+
+
 // Load the plugin main file and start the plugin.
 require_once 'inc/Controller.php';
 $em_to_csv_file   = __FILE__;
@@ -46,5 +46,31 @@ function em_to_csv_load_textdomain() {
 
 	$lang_dir = plugin_basename( __DIR__ ) . '/languages/';
 	load_plugin_textdomain( 'export-em-events-to-csv', false, $lang_dir );
+}
+
+
+/**
+ * Checks if the minimum required PHP version is  installed.
+ *
+ * @return bool
+ */
+function check_php_version() {
+	$correct_php_version = version_compare( phpversion(), '5.6.0', '>=' );
+
+	return $correct_php_version;
+}
+
+/**
+ * Shows an admin notice if the PHP version is too old.
+ */
+function em_to_csv_admin_notice_wrong_php_version() {
+	// translators: %1s  is the minimum required PHP version.
+	$error_message = sprintf( __( 'The plugin export-em-events-to-csv cannot be activated because it requires at least PHP version %1$s. ', 'export-em-events-to-csv' ),
+	5.6 );
+
+	$error_message .= __( 'You are running PHP ', 'export-em-events-to-csv' ) . esc_html( phpversion() );
+	echo wp_kses_post( '<div class="notice error em-events-to-csv-notice is-dismissible" ><p>' . $error_message . '</p></div>' );
+
+
 }
 
