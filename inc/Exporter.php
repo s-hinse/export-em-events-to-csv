@@ -118,7 +118,7 @@ class Exporter {
 		$events = $this->read_event_attributes( $events );
 		$events = $this->add_locations_to_events( $events );
 		$events = $this->strip_html_tags( $events );
-		$this->download_send_headers( 'em-events' . date( 'm- d- y' ) . '.csv' );
+		$this->download_send_headers( 'em-events' . date( 'm-d-y' ) . '.csv' );
 		//phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
 		echo( $this->array_to_csv( $events ) );
 		die;
