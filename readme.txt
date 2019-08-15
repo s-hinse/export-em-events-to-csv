@@ -3,8 +3,8 @@ Contributors: s-hinse
 Donate link: http:///www.svenhinse.de/webdev
 Tags: Events Manager, CSV, Event export
 Requires at least: 4.0
-Tested up to: 4.9.6
-Stable tag: 1.2
+Tested up to: 5.2.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,7 +44,12 @@ If you want to add or remove fields from the selection, you can use the filter '
 
 
 == Changelog ==
-=1.2 =
+= 1.2.1 =
+* run in backend only
+* remove blank space in filename that causes errors in some configurations
+* set minimum required PHP version to 5.6.
+* display errors as admin notice
+= 1.2 =
 * adapt to fit database structure of current events manager plugin for custom attributes
 * add filter to remove unwanted fields from the CSV
 * add option to remember the last used delimiter
