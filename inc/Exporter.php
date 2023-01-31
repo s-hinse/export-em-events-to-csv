@@ -117,10 +117,11 @@ class Exporter {
 		$events = $this->read_events_from_db();
 		$events = $this->read_event_attributes( $events );
 		$events = $this->add_locations_to_events( $events );
-    $events = $this->add_tag_to_events( $events );
-    $events = $this->add_cats_to_events( $events );
+		$events = $this->add_terms_to_events( $events, "event-tags" );
+		$events = $this->add_terms_to_events( $events, "event-categories" );
 		$events = $this->strip_html_tags( $events );
-		$this->download_send_headers( 'em-events' . '-' .date( 'ymd-Hi' ) . '.csv' );
+
+		$this->download_send_headers( 'em-events' . '-' . date( 'ymd-Hi' ) . '.csv' );
 		//phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
 		echo( $this->array_to_csv( $events ) );
 		die;
@@ -197,32 +198,20 @@ class Exporter {
 		return $events;
 	}
 
-  /**
-	 * Adds the taxonomy array to the event array
+	/**
+	 * Adds values for the given taxonomy as comma seperated list to the event array
 	 *
 	 * @param array $events The array with events.
+	 * @param string $taxonomy_slug The slug of the taxonomy to be added.
 	 *
 	 * @return array The supplied events array with added taxonomy details
 	 */
-	private function add_tag_to_events( $events ) {
+	private function add_terms_to_events( $events, $taxonomy_slug ) {
 
 		foreach ( $events as $key => $event ) {
-			$term_obj_list   = get_the_terms( $event['post_id'], 'event-tags' );
-      $term_array = wp_list_pluck($term_obj_list, 'name');
-			$events [ $key ] = is_array( $term_obj_list) ? array_merge( $event, $term_array ) : $event;
-
-		}
-
-		return $events;
-	}
-
-  private function add_cats_to_events( $events ) {
-
-		foreach ( $events as $key => $event ) {
-			$term_obj_list   = get_the_terms( $event['post_id'], 'event-categories' );
-      $term_array = wp_list_pluck($term_obj_list, 'name');
-			$events [ $key ] = is_array( $term_obj_list) ? array_merge( $event, $term_array ) : $event;
-
+			$term_obj_list   = get_the_terms( $event['post_id'], $taxonomy_slug);
+			$term_array      = wp_list_pluck( $term_obj_list, 'name' );
+			$events [ $key ] = is_array( $term_obj_list ) ? array_merge( $event, [ $taxonomy_slug => implode( ", ", $term_array ) ] ) : $event;
 		}
 
 		return $events;
