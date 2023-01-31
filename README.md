@@ -2,7 +2,7 @@
 
 ## Description
  * Addon for the Events Manager Plugin. https://wordpress.org/plugins/events-manager/
- * Exports all events and their locations into a csv file.
+ * Exports all events and their locations, event tags and event categories into a csv file.
  * Choose comma or semicolon as CSV delimiter
 
 ## Requirements
